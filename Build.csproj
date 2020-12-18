@@ -1,0 +1,85 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <AssemblyName>ConduitTaggingFactory</AssemblyName>
+    <OutputType>Library</OutputType>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <InterMediateOutputPath>./build</InterMediateOutputPath>
+    <OutputPath>C:/ProgramData/Autodesk/Revit/Addins/MarathonScripts/ConduitTaggingFactory</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="./views/ConduitTaggingView.xaml.cs">
+      <DependentUpon>ConduitTaggingView.xaml</DependentUpon>
+    </Compile>
+
+    <Compile Include="*.cs"/>
+    <Compile Include="./viewmodels/*.cs"/>
+    <Compile Include="./commands/*.cs"/>
+    <Compile Include="./libs/*.cs"/>
+    <Compile Include="../common_build_source/*.cs"/>
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="./views/res/*.png"/>
+
+    <Page Include="./views/ConduitTaggingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="RevitAPI">
+      <HintPath>.\refs\RevitAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>.\refs\RevitAPIUI.dll</HintPath>
+    </Reference>
+
+    <Reference Include="System"/>
+    <Reference Include="System.Windows.Forms"/>
+    <Reference Include="System.Drawing"/>
+    <Reference Include="System.Runtime.Serialization"/>
+    <Reference Include="System.Runtime.Serialization.Json"/>
+    <Reference Include="System.Xaml"/>
+    <Reference Include="System.Xml"/>
+    <Reference Include="WindowsBase"/>
+    <Reference Include="PresentationCore"/>
+    <Reference Include="PresentationFramework"/>
+    <Reference Include="./refs/System.Windows.Interactivity.dll"/>
+
+  </ItemGroup>
+
+  <Target Name="copy_files">
+    <ItemGroup>
+      <_CopyItems Include="Revit Fams\*.*" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(_CopyItems)" DestinationFolder="C:\ProgramData\Autodesk\Revit\Addins\MarathonScripts\ConduitTaggingFactory\tag_families" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="$(OverwriteReadOnlyFiles)" />
+  </Target>
+
+
+
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+</Project>

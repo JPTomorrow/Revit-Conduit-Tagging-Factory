@@ -1,0 +1,235 @@
+<Window x:Class="JPMorrow.UI.Views.ConduitTaggingView"
+        x:Name="WindowBase"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:Sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:JPMorrow.UI.Views"
+        SizeToContent="WidthAndHeight" Height="Auto" Width="Auto"
+        ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen"
+        Title="Run Table Window" FontSize="14" FontFamily="Segoe UI Light" Background="Maroon"
+        mc:Ignorable="d">
+
+        <!-- Variables -->
+        <Window.Resources>
+                <Sys:String x:Key="Title">Conduit Tagging Factory</Sys:String>
+
+                <Sys:String x:Key="Title_Bar">0</Sys:String>
+
+                <Style x:Key="ButtonHoverNav"  TargetType="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="bg"
+                                    Background="{TemplateBinding Background}"
+                                    Width="30"
+                                    Height="30"
+                                    BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                                VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                    Value="True">
+                                <Setter Property="Background"
+                                        Value="Gray"
+                                        TargetName="bg" />
+                            </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <Style x:Key="MarathonRed"  TargetType="Button">
+                    <Setter Property="FontSize" Value="12" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="bg"
+                                    Background="{TemplateBinding Background}"
+                                    BorderThickness="1"
+                                    BorderBrush="White"
+                                    Width="auto"
+                                    Height="auto">
+
+                                    <TextBlock x:Name="content" VerticalAlignment="center" TextAlignment="center"  TextWrapping="Wrap">
+
+                                        <Run x:Name="text" Text="{TemplateBinding Content}"/>
+                                    </TextBlock>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                    Value="True">
+                                <Setter Property="Background"
+                                        Value="Red"
+                                        TargetName="bg" />
+                            </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <Style x:Key="RunCells"  TargetType="DataGridCell">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Grid Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center" />
+                                </Grid>
+
+
+
+                                <ControlTemplate.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Column.Header}" Value="From" />
+                                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.Text}" Value="UNSET" />
+                                        </MultiDataTrigger.Conditions>
+
+                                        <Setter Property="Background" Value="Red"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </MultiDataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Column.Header}" Value="To" />
+                                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.Text}" Value="UNSET" />
+                                        </MultiDataTrigger.Conditions>
+
+                                        <Setter Property="Background" Value="Red"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </MultiDataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Column.Header}" Value="Total Bends" />
+                                                <Condition Binding="{Binding Under_Bends}" Value="false" />
+                                        </MultiDataTrigger.Conditions>
+
+                                        <Setter Property="Background" Value="Orange"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </MultiDataTrigger>
+
+                                    <!-- <DataTrigger Binding="{Binding Path=From}" Value="UNSET">
+                                        <Setter Property="Background" Value="Blue"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger> -->
+                                </ControlTemplate.Triggers>
+
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+        </Window.Resources>
+
+        <!-- Master Grid -->
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width ="20" />   <!-- 0 -->
+                <ColumnDefinition Width ="100" /> <!-- 1 -->
+                <ColumnDefinition Width ="100" /> <!-- 2 -->
+                <ColumnDefinition Width ="100" /> <!-- 3 -->
+                <ColumnDefinition Width ="100" /> <!-- 3 -->
+                <ColumnDefinition Width ="100" /> <!-- 3 -->
+                <ColumnDefinition Width ="100" /> <!-- 3 -->
+                <ColumnDefinition Width ="*" />    <!-- 10 -->
+                <ColumnDefinition Width ="20" />   <!-- 11 -->
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="30" />      <!-- 4 -->
+                <RowDefinition Height="200" />
+                <RowDefinition Height="40" />      <!-- 7 -->
+                <RowDefinition Height="40" />       <!-- 7 -->
+                <RowDefinition Height="40" />       <!-- 7 -->
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />       <!-- 7 -->
+                <RowDefinition Height="*" />        <!-- 8 -->
+                <RowDefinition Height="20" />       <!-- 9 -->
+            </Grid.RowDefinitions>
+
+           <!-- Title Bar -->
+            <DockPanel Name="TitleBar" Grid.Column="0" Grid.Row="{Binding Source={StaticResource Title_Bar}}" Grid.ColumnSpan="13" Grid.RowSpan="2" >
+
+                <!-- Title -->
+                <StackPanel MouseLeftButtonDown="WindowDrag" Width="auto"  Height="100" Background="Gainsboro" DockPanel.Dock="Left" Orientation="Horizontal">
+                    <Border BorderThickness="3" BorderBrush="Gray" Margin="20,20,5,20" Width="60" Height="60"> <Image Name="IconImg" Source="./res/MPACT_Cat_b.png"  /></Border>
+
+                    <TextBlock Name="TitleText" FontSize="24" Margin="10,0,20,0" Foreground="Gray" VerticalAlignment="center" Text="{Binding Source={StaticResource Title}}" />
+
+                </StackPanel>
+
+                <!-- Nav Buttons -->
+                <StackPanel MouseLeftButtonDown="WindowDrag" Height="100" FlowDirection="RightToLeft" Background="Silver" DockPanel.Dock="Right" Orientation="Horizontal">
+                     <!-- Exit Button -->
+                    <Button Command="{Binding DirtyCloseCmd}" CommandParameter="{Binding ElementName = WindowBase}" Style="{StaticResource ButtonHoverNav}" Background="Transparent" BorderThickness="0" Name="HelpButton" Margin="40,5,0,5">
+                        <Image  Source="./res/exit.png" Stretch="fill" VerticalAlignment="center" />
+                    </Button>
+                     <!-- Help Button -->
+                    <Button Click="HelpClick" Style="{StaticResource ButtonHoverNav}" Background="Transparent" BorderThickness="0" Name="ExitButton" Margin="10,5,0,5">
+                        <Image Source="./res/help.png" Stretch="fill" />
+                    </Button>
+
+                </StackPanel>
+            </DockPanel>
+
+            <DataGrid Name="ConduitTaggingBox" ItemsSource="{Binding Conduit_Items}" SelectionMode="Extended"
+             FontFamily="Consolas" FontSize="14" FontWeight="900" Grid.Column="1" Grid.Row="3"
+             Grid.ColumnSpan="6" Width="auto" Height="auto" AutoGenerateColumns="False"
+             AlternatingRowBackground="Gainsboro" BorderBrush="Maroon" BorderThickness="1"
+             VirtualizingStackPanel.IsVirtualizing="False">
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding SelectionChangedCmd}"
+                                            CommandParameter="{Binding ElementName = ConduitTaggingBox}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="true" >
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Background" Value="Maroon" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn IsReadOnly="True" Width="auto" CellStyle="{StaticResource RunCells}" Header="From" Binding="{Binding From}"/>
+                    <DataGridTextColumn IsReadOnly="True" Width="auto" CellStyle="{StaticResource RunCells}" Header="To" Binding="{Binding To}"/>
+                    <DataGridTextColumn IsReadOnly="True" Width="auto" CellStyle="{StaticResource RunCells}" Header="Type" Binding="{Binding Type}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Button Name="AddButton" Command="{Binding AddCmd}" CommandParameter="{Binding ElementName = WindowBase}" Style="{StaticResource MarathonRed}"  Content="Add" Margin="5,5,0,5" Background="Transparent" Foreground="White" BorderThickness="1" Width="auto" Height="auto" Grid.Column="5" Grid.Row="4" />
+
+            <Button Name="RemoveButton" Command="{Binding RemoveCmd}" CommandParameter="{Binding ElementName = WindowBase}" Style="{StaticResource MarathonRed}"  Content="Remove" Margin="5,5,0,5" Background="Transparent" Foreground="White" BorderThickness="1" Width="auto" Height="auto" Grid.Column="6" Grid.Row="4" />
+
+            <TextBlock Foreground="White"  Text="View" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="4" VerticalAlignment="center" />
+            <ComboBox SelectedIndex="{Binding Path=Tag_View_Sel, Mode=TwoWay}" ItemsSource="{Binding Tag_View_Items}" Margin="7,7,0,7" Grid.Column="5" Grid.ColumnSpan="2" Grid.Row="5" />
+
+            <TextBlock Foreground="White"  Text="Tag Size" Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="4" VerticalAlignment="center" />
+            <ComboBox SelectedIndex="{Binding Path=Tag_Size_Sel, Mode=TwoWay}" ItemsSource="{Binding Tag_Size_Items}" Margin="7,7,0,7" Grid.Column="5" Grid.ColumnSpan="2" Grid.Row="6" />
+
+            <TextBlock Foreground="White"  Text="Tag Orientation" Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="4" VerticalAlignment="center" />
+            <ComboBox SelectedIndex="{Binding Path=Tag_Orient_Sel, Mode=TwoWay}" ItemsSource="{Binding Tag_Orient_Items}" Margin="7,7,0,7" Grid.Column="5" Grid.ColumnSpan="2" Grid.Row="7" />
+
+            <Button Name="RefreshtagViewsButton" Command="{Binding TagViewRefreshCmd}" CommandParameter="{Binding ElementName = WindowBase}" Style="{StaticResource MarathonRed}"  Content="Refresh" Margin="5,5,0,5" Background="Transparent" Foreground="White" BorderThickness="1" Width="auto" Height="auto" Grid.Column="4" Grid.Row="8" />
+
+            <Button Name="CloseButton" Command="{Binding CloseCmd}" CommandParameter="{Binding ElementName = WindowBase}" Style="{StaticResource MarathonRed}"  Content="Close" Margin="5,5,0,5" Background="Transparent" Foreground="White" BorderThickness="1" Width="auto" Height="auto" Grid.Column="5" Grid.Row="8" />
+
+            <Button Name="PlaceTagsButton" Command="{Binding TagCmd}" CommandParameter="{Binding ElementName = WindowBase}" Style="{StaticResource MarathonRed}"  Content="Place Tags" Margin="5,5,0,5" Background="Transparent" Foreground="White" BorderThickness="1" Width="auto" Height="auto" Grid.Column="6" Grid.Row="8" />
+        </Grid>
+</Window>
